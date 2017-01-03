@@ -118,8 +118,10 @@ def main():
 				installer_name = nn + "_installer"
 				print("Reading install_template.py ...")
 				r = open("install_template",'r').read().format(
-					"\"source.zip\"",
-					"\"./temp\""
+					"source.zip",
+					bigname,
+					allowed_os,
+					nn,
 					)
 				with open("dist/%s/%s.py" % (bigname,installer_name),'w') as w:
 					w.write(r)
