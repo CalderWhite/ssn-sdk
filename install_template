@@ -1,0 +1,151 @@
+import zipfile, os, platform, tkinter, sys, getpass, shutil
+from threading import Thread
+from tkinter import filedialog
+from tkinter import ttk
+from tkinter import messagebox
+class Extractor(tkinter.Frame):
+	def __init__(self, parent,filename,ex_path):
+		self.filename = filename
+		self.ex_path = ex_path
+		tkinter.Frame.__init__(self,parent)
+		self.grid(row=0)
+		self.create_widgets()
+	def create_widgets(self):
+		self.widgets = []
+		self.cft = tkinter.StringVar()
+		self.cft.set("Waiting...")
+		self.cf = tkinter.Label(textvariable=self.cft)
+		self.cf.grid(row=0)
+		self.pBar = ttk.Progressbar(orient=tkinter.HORIZONTAL, length=200, mode="determinate", maximum=100, value=0)
+		self.pBar.grid(row=1)
+		self.widgets.append(self.cf)
+		self.widgets.append(self.pBar)
+	def unzip(self):
+		zf = zipfile.ZipFile(self.filename)
+		uncompress_size = sum((file.file_size for file in zf.infolist()))
+		if uncompress_size == 0:
+			uncompress_size = 1
+		extracted_size= 0
+		for file in zf.infolist():
+			self.cft.set(file.orig_filename.split("/")[-1])
+			self.update()
+			extracted_size += file.file_size
+			percentage = extracted_size * 100/uncompress_size
+			self.pBar["value"] = percentage
+			zf.extract(file,self.ex_path)
+	def delete(self):
+		for child in self.widgets:
+			child.grid_remove()
+			child.destroy()
+class installer(object):
+	def __init__(self):
+		self.srcfile = "{0}"
+		self.extract_location = "{1}"
+		self.appname = "{3}"
+		if self.extract_location == ".":
+			raise Exception("Extraction location cannot be current directory (./)")
+		self.good_os = {2}
+		self.excludes = [sys.argv[0]]
+	def create_window(self):
+		self.tk = tkinter.Tk()
+		sw = self.tk.winfo_screenwidth()
+		sh = self.tk.winfo_screenheight()
+		ww = 600
+		wh = 100
+		x = int(sw / 2) - int(ww/2)
+		y = int(sh / 2) - int(wh / 2)
+		self.tk.geometry("%sx%s+%s+%s" % (ww,wh,x,y))
+		self.tk.title("Extracting...")
+		self.tk.resizable(width=False, height=False)
+	def extract_from_source(self,gui=True):
+		if not os.path.exists(self.extract_location):
+			os.mkdir(self.extract_location)
+		if gui:
+			self.create_window()
+			olddir = os.getcwd()
+			app = Extractor(self.tk,self.srcfile,self.extract_location)
+			app.unzip()
+			app.delete()
+			app.grid_remove()
+			app.destroy()
+		else:
+			zipf = zipfile.ZipFile(self.srcfile,'r')
+			zipf.extractall(self.extract_location)
+			zipf.close()
+	def check_os(self):
+		if self.good_os.__contains__(platform.system()):
+			return True
+		else:
+			return False
+	def cancel(self):
+		inp = messagebox.askquestion("Uninstall", "Are you sure you want to cancel installation?\nAll files extracted,downloaded and installed will be lost.",icon="warning")
+		if inp == "yes":
+			if os.path.exists(self.path + "/" + self.appname + "/" + self.extract_location):
+				shutil.rmtree(self.path + "/" + self.appname + "/" + self.extract_location)
+			if os.path.exists(self.path + "/" + self.appname):
+				if len(os.listdir(self.path + "/" + self.appname)) == 0:
+					try:
+						shutil.rmtree(self.path + "/" + self.appname)
+					except PermissionError:
+						pass
+			oldd = os.getcwd()
+			os.chdir("../")
+			try:
+				shutil.rmtree(oldd)
+			except PermissionError:
+				pass
+			self.kill()
+	def kill(self):
+		sys.exit(0)
+	def set_dir(self):
+		p = filedialog.askdirectory(title="Please select an installation directory.",initialdir=self.path)
+		if p != '':
+			self.path = p
+			self.t1.grid_remove()
+			self.t1.destroy()
+			self.t1 = tkinter.Text(self.tk,height=1,width=45)
+			self.t1.insert(tkinter.END,self.path)
+			self.t1.grid(row=0,column=0)
+	def run_install(self):
+		inp = messagebox.askquestion("Install", "Are you sure you want to install in this directory?",icon="warning")
+		if inp == "yes":
+			if not os.path.exists(self.path + "/" + self.appname):
+				os.mkdir(self.path + "/" + self.appname)
+			shutil.move(self.extract_location,self.path + "/" + self.appname)
+		else:
+			self.cancel()
+	def run(self):
+		good2go = self.check_os()
+		if good2go:
+			self.extract_from_source()
+			if platform.system() == "Windows":
+				self.path = "C:/users/%s/AppData/Local" % getpass.getuser()
+				self.t1 = tkinter.Text(self.tk,height=1,width=45)
+				self.t1.insert(tkinter.END,self.path)
+				self.t1.grid(row=0,column=0)
+				btn1 = tkinter.Button(self.tk,text="Browse...",command=self.set_dir)
+				btn1.grid(row=0,column=1)
+				btn2 = tkinter.Button(self.tk,text="Install",command=self.run_install)
+				btn2.grid(row=1,column=0)
+				btn3 = tkinter.Button(self.tk,text="Cancel",command=self.cancel)
+				btn3.grid(row=1,column=1)
+				self.tk.mainloop()
+		else:
+			msg = "Sorry, your operating system (%s) is not supported.\nSupported operating systems include:\n%s" % (
+				platform.system(),
+				"\n".join(self.good_os)
+				)
+			title = self.appname + " Installer"
+			root = tkinter.Tk()
+			root.title(title)
+			w = tkinter.Label(root, text=msg)
+			w.grid(row=0)
+			btn1 = tkinter.Button(root, text = "Ok", command = self.kill)
+			btn1.grid(row=1)
+			root.resizable(width=False, height=False)
+			root.mainloop()
+def main():
+	install = installer()
+	install.run()
+if __name__ == '__main__':
+	main()
