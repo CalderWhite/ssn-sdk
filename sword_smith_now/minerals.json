@@ -1,0 +1,508 @@
+{
+    "all": {
+        "Creedite": {
+            "color": [
+                0,
+                0,
+                170
+            ],
+            "name": "Creedite"
+        },
+        "Shattuckite": {
+            "color": [
+                255,
+                170,
+                0
+            ],
+            "name": "Shattuckite"
+        },
+        "Vlasovite": {
+            "color": [
+                255,
+                170,
+                85
+            ],
+            "name": "Vlasovite"
+        },
+        "Feldspar": {
+            "color": [
+                255,
+                0,
+                170
+            ],
+            "name": "Feldspar"
+        },
+        "Zinnwaldite": {
+            "color": [
+                85,
+                0,
+                255
+            ],
+            "name": "Zinnwaldite"
+        },
+        "Aleksite": {
+            "color": [
+                170,
+                85,
+                255
+            ],
+            "name": "Aleksite"
+        },
+        "Pascoite": {
+            "color": [
+                255,
+                170,
+                255
+            ],
+            "name": "Pascoite"
+        },
+        "Biotite": {
+            "color": [
+                170,
+                0,
+                85
+            ],
+            "name": "Biotite"
+        },
+        "Tschermakite": {
+            "color": [
+                0,
+                255,
+                85
+            ],
+            "name": "Tschermakite"
+        },
+        "Grandreefite": {
+            "color": [
+                85,
+                85,
+                85
+            ],
+            "name": "Grandreefite"
+        },
+        "Uchucchacuaite": {
+            "color": [
+                170,
+                85,
+                170
+            ],
+            "name": "Uchucchacuaite"
+        },
+        "Urea": {
+            "color": [
+                0,
+                255,
+                255
+            ],
+            "name": "Urea"
+        },
+        "Mercury": {
+            "color": [
+                0,
+                0,
+                0
+            ],
+            "name": "Mercury"
+        },
+        "Agardite": {
+            "color": [
+                170,
+                170,
+                85
+            ],
+            "name": "Agardite"
+        },
+        "Knebelite": {
+            "color": [
+                255,
+                0,
+                85
+            ],
+            "name": "Knebelite"
+        },
+        "Orpiment": {
+            "color": [
+                255,
+                255,
+                170
+            ],
+            "name": "Orpiment"
+        },
+        "Barstowite": {
+            "color": [
+                85,
+                170,
+                170
+            ],
+            "name": "Barstowite"
+        },
+        "Scorzalite": {
+            "color": [
+                170,
+                85,
+                85
+            ],
+            "name": "Scorzalite"
+        },
+        "Tyrolite": {
+            "color": [
+                255,
+                85,
+                85
+            ],
+            "name": "Tyrolite"
+        },
+        "Vivianite": {
+            "color": [
+                0,
+                0,
+                255
+            ],
+            "name": "Vivianite"
+        },
+        "Ludlamite": {
+            "color": [
+                255,
+                85,
+                255
+            ],
+            "name": "Ludlamite"
+        },
+        "Linnaeite": {
+            "color": [
+                0,
+                170,
+                85
+            ],
+            "name": "Linnaeite"
+        },
+        "Riebeckite": {
+            "color": [
+                255,
+                85,
+                0
+            ],
+            "name": "Riebeckite"
+        },
+        "Andradite": {
+            "color": [
+                85,
+                170,
+                85
+            ],
+            "name": "Andradite"
+        },
+        "Tokyoite": {
+            "color": [
+                0,
+                85,
+                255
+            ],
+            "name": "Tokyoite"
+        },
+        "Pigeonite": {
+            "color": [
+                85,
+                85,
+                255
+            ],
+            "name": "Pigeonite"
+        },
+        "Norbergite": {
+            "color": [
+                170,
+                170,
+                170
+            ],
+            "name": "Norbergite"
+        },
+        "Fergusonite": {
+            "color": [
+                0,
+                0,
+                85
+            ],
+            "name": "Fergusonite"
+        },
+        "Lonsdaleite": {
+            "color": [
+                170,
+                85,
+                0
+            ],
+            "name": "Lonsdaleite"
+        },
+        "Marthozite": {
+            "color": [
+                170,
+                255,
+                85
+            ],
+            "name": "Marthozite"
+        },
+        "Braunite": {
+            "color": [
+                255,
+                255,
+                0
+            ],
+            "name": "Braunite"
+        },
+        "Xanthoxenite": {
+            "color": [
+                85,
+                255,
+                85
+            ],
+            "name": "Xanthoxenite"
+        },
+        "Orthoclase": {
+            "color": [
+                170,
+                0,
+                255
+            ],
+            "name": "Orthoclase"
+        },
+        "Uricite": {
+            "color": [
+                0,
+                85,
+                0
+            ],
+            "name": "Uricite"
+        },
+        "Cadmoselite": {
+            "color": [
+                85,
+                170,
+                255
+            ],
+            "name": "Cadmoselite"
+        },
+        "Euclase": {
+            "color": [
+                255,
+                255,
+                85
+            ],
+            "name": "Euclase"
+        },
+        "Tremolite": {
+            "color": [
+                170,
+                255,
+                0
+            ],
+            "name": "Tremolite"
+        },
+        "Xingzhongite": {
+            "color": [
+                85,
+                85,
+                0
+            ],
+            "name": "Xingzhongite"
+        },
+        "Xilingolite": {
+            "color": [
+                170,
+                0,
+                0
+            ],
+            "name": "Xilingolite"
+        },
+        "Omphacite": {
+            "color": [
+                0,
+                170,
+                255
+            ],
+            "name": "Omphacite"
+        },
+        "Weissite": {
+            "color": [
+                85,
+                255,
+                0
+            ],
+            "name": "Weissite"
+        },
+        "Heazlewoodite": {
+            "color": [
+                170,
+                255,
+                170
+            ],
+            "name": "Heazlewoodite"
+        },
+        "Panethite": {
+            "color": [
+                170,
+                255,
+                255
+            ],
+            "name": "Panethite"
+        },
+        "Ord\u00f3\u00f1ezite": {
+            "color": [
+                85,
+                255,
+                170
+            ],
+            "name": "Ord\u00f3\u00f1ezite"
+        },
+        "Samarskite-(Y)": {
+            "color": [
+                0,
+                170,
+                170
+            ],
+            "name": "Samarskite-(Y)"
+        },
+        "Delvauxite": {
+            "color": [
+                170,
+                0,
+                170
+            ],
+            "name": "Delvauxite"
+        },
+        "Ferrohortonolite": {
+            "color": [
+                255,
+                0,
+                255
+            ],
+            "name": "Ferrohortonolite"
+        },
+        "Dypingite": {
+            "color": [
+                255,
+                0,
+                0
+            ],
+            "name": "Dypingite"
+        },
+        "Geigerite": {
+            "color": [
+                170,
+                170,
+                0
+            ],
+            "name": "Geigerite"
+        },
+        "Stephanite": {
+            "color": [
+                170,
+                170,
+                255
+            ],
+            "name": "Stephanite"
+        },
+        "Olivine": {
+            "color": [
+                0,
+                85,
+                85
+            ],
+            "name": "Olivine"
+        },
+        "Franklinite": {
+            "color": [
+                0,
+                170,
+                0
+            ],
+            "name": "Franklinite"
+        },
+        "Rambergite": {
+            "color": [
+                85,
+                85,
+                170
+            ],
+            "name": "Rambergite"
+        },
+        "Janggunite": {
+            "color": [
+                0,
+                255,
+                170
+            ],
+            "name": "Janggunite"
+        },
+        "Jarosite": {
+            "color": [
+                255,
+                85,
+                170
+            ],
+            "name": "Jarosite"
+        },
+        "Calderite": {
+            "color": [
+                0,
+                255,
+                0
+            ],
+            "name": "Calderite"
+        },
+        "Fluorapophyllite": {
+            "color": [
+                255,
+                255,
+                255
+            ],
+            "name": "Fluorapophyllite"
+        },
+        "Domeykite": {
+            "color": [
+                255,
+                170,
+                170
+            ],
+            "name": "Domeykite"
+        },
+        "Babefphite": {
+            "color": [
+                0,
+                85,
+                170
+            ],
+            "name": "Babefphite"
+        },
+        "Epsomite": {
+            "color": [
+                85,
+                0,
+                0
+            ],
+            "name": "Epsomite"
+        },
+        "Franckeite": {
+            "color": [
+                85,
+                0,
+                170
+            ],
+            "name": "Franckeite"
+        },
+        "Germanite": {
+            "color": [
+                85,
+                255,
+                255
+            ],
+            "name": "Germanite"
+        },
+        "Utahite": {
+            "color": [
+                85,
+                170,
+                0
+            ],
+            "name": "Utahite"
+        }
+    }
+}

@@ -1,8 +1,9 @@
-import zipfile, os, platform, tkinter, sys, getpass, shutil
+import zipfile, os, platform, tkinter, sys, shutil, getpass, json
 from threading import Thread
 from tkinter import filedialog
 from tkinter import ttk
 from tkinter import messagebox
+from win32com.client import Dispatch	
 class Extractor(tkinter.Frame):
 	def __init__(self, parent,filename,ex_path):
 		self.filename = filename
@@ -16,12 +17,12 @@ class Extractor(tkinter.Frame):
 		self.cft.set("Waiting...")
 		self.cf = tkinter.Label(textvariable=self.cft)
 		self.cf.grid(row=0)
-		self.pBar = ttk.Progressbar(orient=tkinter.HORIZONTAL, length=200, mode="determinate", maximum=100, value=0)
+		self.pBar = ttk.Progressbar(orient=tkinter.HORIZONTAL, length=590, mode="determinate", maximum=100, value=0)
 		self.pBar.grid(row=1)
 		self.widgets.append(self.cf)
 		self.widgets.append(self.pBar)
 	def unzip(self):
-		zf = zipfile.ZipFile(self.filename)
+		zf = zipfile.ZipFile(self.filename) 	
 		uncompress_size = sum((file.file_size for file in zf.infolist()))
 		if uncompress_size == 0:
 			uncompress_size = 1
@@ -46,6 +47,11 @@ class installer(object):
 			raise Exception("Extraction location cannot be current directory (./)")
 		self.good_os = {2}
 		self.excludes = [sys.argv[0]]
+		self.fpath = os.getenv("APPDATA") + "\\." + self.appname
+		self.path = "C:/users/%s/Saved Games/" % getpass.getuser()
+		self.launch_name = "{5}"
+		self.icon_path = self.fpath +"\\" + self.extract_location + "\\" "{4}"
+		print(self.icon_path)
 	def create_window(self):
 		self.tk = tkinter.Tk()
 		sw = self.tk.winfo_screenwidth()
@@ -77,15 +83,19 @@ class installer(object):
 			return True
 		else:
 			return False
+	def create_shortcut(self):
+		shell = Dispatch('WScript.Shell')
+		shortcut = shell.CreateShortCut(path)
+		shortcut.Targetpath = self.path 
 	def cancel(self):
 		inp = messagebox.askquestion("Uninstall", "Are you sure you want to cancel installation?\nAll files extracted,downloaded and installed will be lost.",icon="warning")
 		if inp == "yes":
-			if os.path.exists(self.path + "/" + self.appname + "/" + self.extract_location):
-				shutil.rmtree(self.path + "/" + self.appname + "/" + self.extract_location)
-			if os.path.exists(self.path + "/" + self.appname):
-				if len(os.listdir(self.path + "/" + self.appname)) == 0:
+			if os.path.exists(self.fpath + "/" + self.appname + "/" + self.extract_location):
+				shutil.rmtree(self.fpath + "/" + self.appname + "/" + self.extract_location)
+			if os.path.exists(self.fpath + "/" + self.appname):
+				if len(os.listdir(self.fpath + "/" + self.appname)) == 0:
 					try:
-						shutil.rmtree(self.path + "/" + self.appname)
+						shutil.rmtree(self.fpath + "/" + self.appname)
 					except PermissionError:
 						pass
 			oldd = os.getcwd()
@@ -100,18 +110,42 @@ class installer(object):
 	def set_dir(self):
 		p = filedialog.askdirectory(title="Please select an installation directory.",initialdir=self.path)
 		if p != '':
-			self.path = p
+			self.fpath = p
 			self.t1.grid_remove()
 			self.t1.destroy()
 			self.t1 = tkinter.Text(self.tk,height=1,width=45)
-			self.t1.insert(tkinter.END,self.path)
+			self.t1.insert(tkinter.END,self.fpath)
 			self.t1.grid(row=0,column=0)
 	def run_install(self):
 		inp = messagebox.askquestion("Install", "Are you sure you want to install in this directory?",icon="warning")
 		if inp == "yes":
-			if not os.path.exists(self.path + "/" + self.appname):
-				os.mkdir(self.path + "/" + self.appname)
-			shutil.move(self.extract_location,self.path + "/" + self.appname)
+			if not os.path.exists(self.fpath):
+				os.mkdir(self.fpath)
+			if os.path.exists(self.fpath + "\\" + self.extract_location):
+				print("Removing old installation...")
+				shutil.rmtree(self.fpath + "\\" + self.extract_location)
+			# move game directory
+			shutil.move(self.extract_location,self.fpath)
+			if os.path.exists(self.path + "\\" + self.launch_name):
+				print("Removing old launcher...")
+				os.remove(self.path + "\\" + self.launch_name)
+			# move file that the user will open
+			shutil.move(self.fpath + "\\" + self.extract_location + "\\" + self.launch_name,self.path)
+			# work with the game_info.json file
+			try:
+				r = open(self.fpath + "\\" + self.extract_location + "\\" + "ssn\\game_info.json",'r')
+			except:
+				raise Exception(self.fpath + "\\" + self.extract_location + "\\" + "ssn\\game_info.json" + " is missing!")
+			else:
+				r = open(self.fpath + "\\" + self.extract_location + "\\" + "ssn\\game_info.json",'r').read()
+				j = json.loads(r)
+				j["paths"]["."] = self.fpath + "\\" + self.extract_location
+				j = json.dumps(j,indent=4)
+				w = open(self.path + "/ssn/game_info.json",'w')
+				w.write(j)
+				w.close()
+				os.remove(self.fpath + "\\" + self.extract_location + "\\" + "ssn\\game_info.json")
+				self.kill()
 		else:
 			self.cancel()
 	def run(self):
@@ -119,9 +153,9 @@ class installer(object):
 		if good2go:
 			self.extract_from_source()
 			if platform.system() == "Windows":
-				self.path = "C:/users/%s/AppData/Local" % getpass.getuser()
+				self.path = "C:/users/%s/Saved Games" % getpass.getuser()
 				self.t1 = tkinter.Text(self.tk,height=1,width=45)
-				self.t1.insert(tkinter.END,self.path)
+				self.t1.insert(tkinter.END,self.fpath)
 				self.t1.grid(row=0,column=0)
 				btn1 = tkinter.Button(self.tk,text="Browse...",command=self.set_dir)
 				btn1.grid(row=0,column=1)

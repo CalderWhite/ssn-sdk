@@ -1,0 +1,11 @@
+INFO:root:Running Launcher with gui.
+INFO:root:Running launcher in gui...
+INFO:root:Time: 2017-01-03 13:37:48.130716
+INFO:root:Setting launcher icon.
+INFO:root:Running launch. Mode : 1
+INFO:root:Loading the game info file [ssn/game_info.json]...
+INFO:root:Loading requirements list.
+INFO:root:Checking required modules for DEV MODE...
+INFO:root:All required modules present.
+INFO:root:Load was succesful.
+INFO:root:--------------------------------------------------------

@@ -13,11 +13,13 @@ def remove_excluded_dirs(path,excludes):
 	for e in excludes:
 		if dirs.__contains__(e):
 			shutil.rmtree(path + "/" + e)
-def remove_excluded_files(path,excludes):
+def remove_excluded_files(path,excludes,suffixes):
 	f = get_files(path)
 	for i in f:
 		fn = i.split("\\")[-1]
 		if excludes.__contains__(fn):
+			os.remove(i)
+		elif suffixes.__contains__(i.split(".")[-1]):
 			os.remove(i)
 def zipdir(path, ziph):
     # ziph is zipfile handle
@@ -43,10 +45,16 @@ def main():
 				"README.md",
 				"Thumbs.db",
 				"test.py"
+			],
+			"suffixes" : [
+				".py",
+				".pyw"
+				".pyc"
 			]
 		}
 		mainfilename = "launcher.py"
 		appname = "Sword Smith Now"
+		endname = "Sword_Smith_Now.exe"
 		argz = sys.argv[1:]
 		dash = []
 		ddash = []
@@ -77,7 +85,7 @@ def main():
 			if os.path.exists("./dist/%s_%s" % (operating_system_dist,nn)) or os.path.exists("./dist/%s" % bigname):
 				print("ERROR: There is already a version [%s]" % commands[1])
 			else:
-				ctypes.windll.user32.MessageBoxW(0, "NOTE: The average build time is 220 seconds! This WILL take a while...", "Sword Smith Now Builder", 0)
+				ctypes.windll.user32.MessageBoxW(0, "NOTE: The average build time is 300 seconds! This WILL take a while...", "Sword Smith Now Builder", 0)
 				print("Running on %s %s %s" % (ops,platform.release(),platform.architecture()[0]))
 				cmnd = "py ./pyinstaller/pyinstaller.py \"%s/%s\" --onefile" % (commands[0],mainfilename)
 				print("Running %s" % cmnd)
@@ -93,13 +101,19 @@ def main():
 				excludes["files"].append(mainfilename)
 				# directories first
 				remove_excluded_dirs("./build/" + nn,excludes["dirs"])
-				remove_excluded_files("./build/" + nn,excludes["files"])
+				remove_excluded_files(
+					"./build/" + nn,
+					excludes["files"],
+					excludes["suffixes"]
+					)
 				print("Moving standalone executable to build directory.")
 				try:
 					shutil.move("dist/" + mainfilename.split(".")[0] + ".exe","./build/%s" % (nn))
 				except FileNotFoundError:
 					print("THERE WAS AN ERROR COMPILING THE PYTHON SOURCE")
 				else:
+					# rename file
+					os.rename("./build/%s/%s" % (nn,mainfilename.split(".")[0] + ".exe"),"./build/%s/%s" % (nn,endname))
 					# create dist directory
 					os.mkdir("./dist/" + bigname)
 					zipf = zipfile.ZipFile(
@@ -122,6 +136,8 @@ def main():
 					bigname,
 					allowed_os,
 					nn,
+					"images/icon.ico",
+					endname
 					)
 				with open("dist/%s/%s.py" % (bigname,installer_name),'w') as w:
 					w.write(r)
