@@ -17,7 +17,7 @@ class Extractor(tkinter.Frame):
 		self.cft.set("Waiting...")
 		self.cf = tkinter.Label(textvariable=self.cft)
 		self.cf.grid(row=0)
-		self.pBar = ttk.Progressbar(orient=tkinter.HORIZONTAL, length=590, mode="determinate", maximum=100, value=0)
+		self.pBar = ttk.Progressbar(orient=tkinter.HORIZONTAL, length=600, mode="determinate", maximum=100, value=0)
 		self.pBar.grid(row=1)
 		self.widgets.append(self.cf)
 		self.widgets.append(self.pBar)
@@ -83,10 +83,33 @@ class installer(object):
 			return True
 		else:
 			return False
-	def create_shortcut(self):
+	def create_windows_shortcut(self,output_path,path):
 		shell = Dispatch('WScript.Shell')
-		shortcut = shell.CreateShortCut(path)
-		shortcut.Targetpath = self.path 
+		shortcut = shell.CreateShortCut(output_path)
+		shortcut.Targetpath = path
+		shortcut.IconLocation = self.icon_path
+		shortcut.save()
+	def create_windows_shortcuts(self):
+		target = "C:/users/%s/Saved Games/%s" % (getpass.getuser(),self.launch_name)
+		# this one for the desktop
+		self.create_windows_shortcut(
+			"C:/users/%s/Desktop/%s.lnk" % (getpass.getuser(),self.appname),
+			target
+			)
+		# first check the Start Menu directory
+		if not os.path.exists("%s\\Microsoft\\Windows\\Start Menu\\Programs\\%s" % (os.getenv("APPDATA"),self.appname)):
+			os.mkdir("%s\\Microsoft\\Windows\\Start Menu\\Programs\\%s" % (os.getenv("APPDATA"),self.appname))
+		##else:
+		##	ld = os.listdir("%s\\Microsoft\\Windows\\Start Menu\\Programs\\%s" % (os.getenv("APPDATA"),self.appname))
+		self.create_windows_shortcut(
+			"%s\\Microsoft\\Windows\\Start Menu\\Programs\\%s\\%s.lnk" % (
+				os.getenv("APPDATA"),
+				self.appname,
+				self.appname
+				),
+			target
+			)
+
 	def cancel(self):
 		inp = messagebox.askquestion("Uninstall", "Are you sure you want to cancel installation?\nAll files extracted,downloaded and installed will be lost.",icon="warning")
 		if inp == "yes":
@@ -98,12 +121,6 @@ class installer(object):
 						shutil.rmtree(self.fpath + "/" + self.appname)
 					except PermissionError:
 						pass
-			oldd = os.getcwd()
-			os.chdir("../")
-			try:
-				shutil.rmtree(oldd)
-			except PermissionError:
-				pass
 			self.kill()
 	def kill(self):
 		sys.exit(0)
@@ -145,6 +162,9 @@ class installer(object):
 				w.write(j)
 				w.close()
 				os.remove(self.fpath + "\\" + self.extract_location + "\\" + "ssn\\game_info.json")
+				# create shortcuts
+				print("Creating shortcuts...")
+				self.create_windows_shortcuts()
 				self.kill()
 		else:
 			self.cancel()
