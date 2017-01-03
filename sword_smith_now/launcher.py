@@ -58,8 +58,8 @@ class launcher(object):
 			# reload runtime so that all code changes are implimented
 			import runtime
 			runtime = imp.reload(runtime)
-			r = open(self.game_info_name,'r').read()
-			self.info = json.loads(r)
+			##r = open(self.game_info_name,'r').read()
+			##self.info = json.loads(r)
 			runtime.main(self)
 			self.log("Game has stopped.")
 			self.log("Collecting the garbage...")
@@ -140,6 +140,7 @@ class launcher(object):
 		except:
 			raise Exception("Game info [paths][.] is missing.")
 		else:
+			self.info = info
 			os.chdir(info["paths"]["."])
 	def log(self,msg,level="INFO",user="LAUNCHER"):
 		logging.log(logging.__getattribute__(level),msg)
@@ -157,8 +158,7 @@ class launcher(object):
 		pass
 	def module_checklist(self):
 		self.log("Loading the game info file [%s]..." % (self.game_info_name))
-		r = open(self.game_info_name,'r').read()
-		info = json.loads(r)
+		info = self.info
 		try:
 			x = info["paths"]
 			x = info["name"]
