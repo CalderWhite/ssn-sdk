@@ -88,6 +88,7 @@ class installer(object):
 		shortcut = shell.CreateShortCut(output_path)
 		shortcut.Targetpath = path
 		shortcut.IconLocation = self.icon_path
+		shortcut.WorkingDirectory = self.path
 		shortcut.save()
 	def create_windows_shortcuts(self):
 		target = "C:/users/%s/Saved Games/%s" % (getpass.getuser(),self.launch_name)
