@@ -75,7 +75,7 @@ def main():
 				print("Creating \"./dist\" directory...")
 				os.mkdir("./dist")
 			print("Creating build directory...")
-			nn = commands[0].replace(" ","_")
+			nn = commands[0].split("/")[-1].replace(" ","_")
 			bigname = "%s_%s_%s" % (
 				appname.replace(" ","_"),
 				operating_system_dist,
