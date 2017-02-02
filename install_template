@@ -1,23 +1,31 @@
-import zipfile, os, platform, tkinter, sys, shutil, getpass, json
+import zipfile, os, platform, sys, shutil, getpass, json
 from threading import Thread
-from tkinter import filedialog
-from tkinter import ttk
+from tkinter import Button
+from tkinter import Text
+from tkinter import Label
+from tkinter import HORIZONTAL
+from tkinter import StringVar
+from tkinter import Frame
+from tkinter import END
+from tkinter import Tk
+from tkinter.filedialog import askdirectory
+from tkinter.ttk import Progressbar
 from tkinter import messagebox
 from win32com.client import Dispatch	
-class Extractor(tkinter.Frame):
+class Extractor(Frame):
 	def __init__(self, parent,filename,ex_path):
 		self.filename = filename
 		self.ex_path = ex_path
-		tkinter.Frame.__init__(self,parent)
+		Frame.__init__(self,parent)
 		self.grid(row=0)
 		self.create_widgets()
 	def create_widgets(self):
 		self.widgets = []
-		self.cft = tkinter.StringVar()
+		self.cft = StringVar()
 		self.cft.set("Waiting...")
-		self.cf = tkinter.Label(textvariable=self.cft)
+		self.cf = Label(textvariable=self.cft)
 		self.cf.grid(row=0)
-		self.pBar = ttk.Progressbar(orient=tkinter.HORIZONTAL, length=600, mode="determinate", maximum=100, value=0)
+		self.pBar = Progressbar(orient=HORIZONTAL, length=600, mode="determinate", maximum=100, value=0)
 		self.pBar.grid(row=1)
 		self.widgets.append(self.cf)
 		self.widgets.append(self.pBar)
@@ -53,7 +61,7 @@ class installer(object):
 		self.icon_path = self.fpath +"\\" + self.extract_location + "\\" "{4}"
 		print(self.icon_path)
 	def create_window(self):
-		self.tk = tkinter.Tk()
+		self.tk = Tk()
 		sw = self.tk.winfo_screenwidth()
 		sh = self.tk.winfo_screenheight()
 		ww = 600
@@ -126,13 +134,13 @@ class installer(object):
 	def kill(self):
 		sys.exit(0)
 	def set_dir(self):
-		p = filedialog.askdirectory(title="Please select an installation directory.",initialdir=self.path)
+		p = askdirectory(title="Please select an installation directory.",initialdir=self.path)
 		if p != '':
 			self.fpath = p
 			self.t1.grid_remove()
 			self.t1.destroy()
-			self.t1 = tkinter.Text(self.tk,height=1,width=45)
-			self.t1.insert(tkinter.END,self.fpath)
+			self.t1 = Text(self.tk,height=1,width=45)
+			self.t1.insert(END,self.fpath)
 			self.t1.grid(row=0,column=0)
 	def run_install(self):
 		inp = messagebox.askquestion("Install", "Are you sure you want to install in this directory?",icon="warning")
@@ -175,14 +183,14 @@ class installer(object):
 			self.extract_from_source()
 			if platform.system() == "Windows":
 				self.path = "C:/users/%s/Saved Games" % getpass.getuser()
-				self.t1 = tkinter.Text(self.tk,height=1,width=45)
-				self.t1.insert(tkinter.END,self.fpath)
+				self.t1 = Text(self.tk,height=1,width=45)
+				self.t1.insert(END,self.fpath)
 				self.t1.grid(row=0,column=0)
-				btn1 = tkinter.Button(self.tk,text="Browse...",command=self.set_dir)
+				btn1 = Button(self.tk,text="Browse...",command=self.set_dir)
 				btn1.grid(row=0,column=1)
-				btn2 = tkinter.Button(self.tk,text="Install",command=self.run_install)
+				btn2 = Button(self.tk,text="Install",command=self.run_install)
 				btn2.grid(row=1,column=0)
-				btn3 = tkinter.Button(self.tk,text="Cancel",command=self.cancel)
+				btn3 = Button(self.tk,text="Cancel",command=self.cancel)
 				btn3.grid(row=1,column=1)
 				self.tk.mainloop()
 		else:
@@ -191,11 +199,11 @@ class installer(object):
 				"\n".join(self.good_os)
 				)
 			title = self.appname + " Installer"
-			root = tkinter.Tk()
+			root = Tk()
 			root.title(title)
-			w = tkinter.Label(root, text=msg)
+			w = Label(root, text=msg)
 			w.grid(row=0)
-			btn1 = tkinter.Button(root, text = "Ok", command = self.kill)
+			btn1 = Button(root, text = "Ok", command = self.kill)
 			btn1.grid(row=1)
 			root.resizable(width=False, height=False)
 			root.mainloop()
